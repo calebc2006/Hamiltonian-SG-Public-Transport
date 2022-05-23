@@ -67,6 +67,10 @@ def generateAdjList():
             adjList[stop].append((nextStop, dist[nextStop]))
             paths[stop][nextStop] = path[nextStop]
 
+    f = open("targetsAdjList.json", "w")
+    json.dump(adjList, f)
+    f.close()
+    
     return adjList, paths
 
 def printDist(start, end, adjList, paths):
