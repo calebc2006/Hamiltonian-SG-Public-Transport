@@ -4,6 +4,7 @@ import heapq
 
 f = open("allStopsAdjList.json", "r")
 data = json.load(f)
+f.close()
 
 targets = [
     "17141",  # Clementi Stadium
@@ -55,6 +56,7 @@ def dijkstra(graph, root):  # Graph is an adjList
 
     return dist, path
 
+
 def generateAdjList():
     adjList = {}
     paths = {}
@@ -69,6 +71,7 @@ def generateAdjList():
 
     return adjList, paths
 
+
 def printDist(start, end, adjList, paths):
     for stop, dist in adjList[start]:
         if stop == end:
@@ -80,12 +83,18 @@ def printDist(start, end, adjList, paths):
 def main():
     findAllStops()
     adjList, paths = generateAdjList()
+
+    f = open("targetsAdjList.json", "w")
+    json.dump(adjList, f)
+    f.close()
+
     print("")
     print(adjList)
 
     start = "13079"
     end = "97041"
     printDist(start, end, adjList, paths)
+
 
 if __name__ == "__main__":
     main()
