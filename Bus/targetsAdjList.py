@@ -1,8 +1,9 @@
 from gettext import find
 import json
 import heapq
+import pandas as pd
 
-f = open("allStopsAdjList.json", "r")
+f = open("Bus/allStopsAdjList.json", "r")
 data = json.load(f)
 f.close()
 
@@ -69,13 +70,27 @@ def generateAdjList():
             adjList[stop].append((nextStop, dist[nextStop]))
             paths[stop][nextStop] = path[nextStop]
 
-    f = open("targetsAdjList.json", "w")
+    f = open("Bus/targetsAdjList.json", "w")
     json.dump(adjList, f)
     f.close()
     
     return adjList, paths
 
+def generateAdjMatrix(adjList):
+    dfAdjList = {}
+    for i in adjList:
+        row = adjList[i]
+        newRow = []
+        for j in row:
+            newRow.append(j[1])
+        dfAdjList[i] = newRow
 
+    df = pd.DataFrame(dfAdjList, index = targets)
+    print(df)
+    
+    df.to_csv("Bus/targetsAdjMatrix.csv")
+    
+    
 def printDist(start, end, adjList, paths):
     for stop, dist in adjList[start]:
         if stop == end:
@@ -88,12 +103,7 @@ def main():
     findAllStops()
     adjList, paths = generateAdjList()
 
-    f = open("targetsAdjList.json", "w")
-    json.dump(adjList, f)
-    f.close()
-
-    print("")
-    print(adjList)
+    generateAdjMatrix(adjList)
 
     start = "13079"
     end = "97041"
