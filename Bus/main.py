@@ -90,7 +90,7 @@ def generateAdjMatrix(adjList):
         dfAdjList[i] = newRow
 
     df = pd.DataFrame(dfAdjList, index=targets)
-    print(df)
+    return df
 
     df.to_csv("Bus/targetsAdjMatrix.csv")
 
@@ -148,17 +148,49 @@ def printShortestPaths(adjList):
     for perm in bestPerms:
         path = []
         path = [targets[i] for i in perm]
+        path.append(str(targets[perm[0]]))
         print(path)
+
+
+def printPath(nodes, paths):
+    length = 0
+    for i in range(len(nodes)-1):
+        length += printOnePath(nodes[i].strip(), nodes[i+1].strip(), paths)
+    print(f"\nTotal Length: {length} stops")
+
+
+def printOnePath(a, b, paths):
+    for stop in paths[a][b]:
+        print(stop)
+    print("")
+    return len(paths[a][b]) - 1
 
 
 def main():
     findAllStops()
     adjList, paths = generateAdjList()
-    print("")
-    generateAdjMatrix(adjList)
-    print("")
+    matrix = generateAdjMatrix(adjList)
 
-    printShortestPaths(adjList)
+    while True:
+        command = input("... ")
+        if command == "matrix":
+            print(matrix)
+            print("")
+        if command == "cycles":
+            printShortestPaths(adjList)
+            print("")
+        if command[:4] == "path":
+            raw = command[5:]
+            nodes = raw[1:-1].split(',')
+            for i in range(len(nodes)):
+                nodes[i] = nodes[i].strip()[1:-1]
+            printPath(nodes, paths)
+            print("")
+        if command == "help":
+            print(
+                "Commands are 'matrix', 'cycles', 'path ['', '', '', ...]' and exit")
+        if command == "exit":
+            return
 
 
 if __name__ == "__main__":
