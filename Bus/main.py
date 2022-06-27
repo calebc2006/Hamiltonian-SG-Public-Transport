@@ -9,12 +9,13 @@ data = json.load(f)
 f.close()
 
 targets = [
-    "17141",  # Clementi Stadium
-    "42299",  # Aft Toh Tuck Cres
-    "97041",  # Ballota Park Condo
-    "70051",  # Aft Joo Seng Rd
-    "13079",  # The Cosmopolitan
-    "97039"
+    "09179",
+    "04339",
+    "14119",
+    "19081",
+    "16149",
+    "11511",
+    "11401"
 ]
 N = len(targets)
 allStops = set()
@@ -90,9 +91,8 @@ def generateAdjMatrix(adjList):
         dfAdjList[i] = newRow
 
     df = pd.DataFrame(dfAdjList, index=targets)
+    df.to_csv("Bus/adjMatrix.csv")
     return df
-
-    df.to_csv("Bus/targetsAdjMatrix.csv")
 
 
 # FINDING SHORTEST LOOP
@@ -161,7 +161,7 @@ def printPath(nodes, paths):
 
 def printOnePath(a, b, paths):
     for stop in paths[a][b]:
-        print(stop)
+        print(stop, end=', ')
     print("")
     return len(paths[a][b]) - 1
 
